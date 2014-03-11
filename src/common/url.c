@@ -395,7 +395,39 @@ regex_match (const GRegex *re, const char *word, int *start, int *end)
 {
 	GMatchInfo *gmi;
 
+/*
+gboolean            g_regex_match                       (const GRegex *regex,
+                                                         const gchar *string,
+                                                         GRegexMatchFlags match_options,
+                                                         GMatchInfo **match_info);
+gboolean            g_regex_match_full                  (const GRegex *regex,
+                                                         const gchar *string,
+                                                         gssize string_len,
+                                                         gint start_position,
+                                                         GRegexMatchFlags match_options,
+                                                         GMatchInfo **match_info,
+                                                         GError **error);
+*/
+#if 1
+	gboolean r;
+	GError *err=NULL;
+
+	g_regex_match_full(re,
+					   word,
+					   strlen(word),
+					   0,
+					   0,
+					   &gmi,
+					   &err);
+
+	if (err != NULL)
+	{
+		   g_printerr ("Error while matching: %s\n", err->message);
+		   g_error_free (err);
+	}
+#else
 	g_regex_match (re, word, 0, &gmi);
+#endif
 	
 	if (!g_match_info_matches (gmi))
 	{
